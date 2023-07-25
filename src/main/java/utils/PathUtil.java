@@ -61,29 +61,6 @@ public class PathUtil {
             if (trackSourceFile && projectDir != null && !projectDir.isBlank() && !(projectDir.endsWith(".jar") || projectDir.endsWith(".zip"))) {
                 String file = locateSourceFile(projectDir, unit.getJavaClass());
                 unit.setFile(file);
-                if (unit.getJavaClass().endsWith("_jsp") && unit.getLine() != -1) {
-                    String classPath = packageToDirString(unit.getJavaClass()) + ".class";
-                    List<String> sourceFile = filterFile(projectDir, new String[]{"**/" + classPath});
-                    if (sourceFile.isEmpty()) {
-                        continue;
-                    }
-                    String sourceDebug = readSourceDebug(Paths.get(projectDir, sourceFile.get(0)).toString());
-                    if (sourceDebug == null) {
-                        continue;
-                    }
-                    SmapInfo smapInfo = getSmapInfo(sourceDebug);
-                    List<SmapInfo.LineInfo.LineMapping> jspLineMap = smapInfo.getMapping();
-                    for (SmapInfo.LineInfo.LineMapping m : jspLineMap) {
-                        if (m.getOutputBeginLine() <= unit.getLine() && unit.getLine() <= m.getOutputEndLine()) {
-                            unit.setJspLine(m.getInputLine());
-                        }
-                    }
-                    List<String> jspFile = filterFile(projectDir, new String[]{"**/" + smapInfo.getSourceFilePath()});
-                    if (!jspFile.isEmpty()) {
-                        unit.setJspFile(jspFile.get(0));
-                    }
-
-                }
             }
             path.add(unit);
         }
