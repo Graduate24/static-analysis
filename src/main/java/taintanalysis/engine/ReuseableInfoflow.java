@@ -41,10 +41,10 @@ import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 import soot.jimple.infoflow.solver.executors.InterruptableExecutor;
 import soot.jimple.infoflow.solver.gcSolver.GCSolverPeerGroup;
 import soot.jimple.infoflow.solver.memory.IMemoryManager;
-import soot.jimple.infoflow.sourcesSinks.manager.DefaultSourceSinkManager;
 import soot.jimple.infoflow.sourcesSinks.manager.IOneSourceAtATimeManager;
 import soot.jimple.infoflow.sourcesSinks.manager.ISourceSinkManager;
 import taintanalysis.config.Config;
+import taintanalysis.sourcesink.manager.ParamSourceSinkManager;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -94,11 +94,11 @@ public class ReuseableInfoflow extends Infoflow {
                                 Collection<String> sources, Collection<String> sinks) {
         if (!hasUse()) {
             this.computeInfoflow(appPath, libPath, new DefaultEntryPointCreator(entryPoints),
-                    new DefaultSourceSinkManager(sources, sinks));
+                    new ParamSourceSinkManager(sources, sinks));
 
         } else {
             logger.info("\n---- reuse soot and iCFG to compute info flow ----\n");
-            DefaultSourceSinkManager sourcesSinks = new DefaultSourceSinkManager(sources, sinks);
+            ParamSourceSinkManager sourcesSinks = new ParamSourceSinkManager(sources, sinks);
             final InfoflowPerformanceData performanceData = createPerformanceDataClass();
             try {
                 // Clear the data from previous runs
