@@ -15,57 +15,59 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-//    usage: taintanalysis [-h] [-dc {true,false}] [-c CONFIG]
-//            [-p [PROJECT [PROJECT ...]]] [-j JDK]
-//            [-t {true,false}] [-w {true,false}] [-o OUTPUT]
-//            [-cg {CHA,SPARK,VTA,RTA,GEOM}] [-to TIMEOUT]
-//            [-es [ENTRYSELECTOR [ENTRYSELECTOR ...]]]
-//            [-pc [PATHCHECKER [PATHCHECKER ...]]]
-//            [-r [RULES [RULES ...]]] [-lr LISTRULE] [-jspc JSPC]
-//
-//    Run taint  analysis  of  given  project.  Example:  -dc  true  -p /project1
-///project2 -j /jdk/rt.jar -t true -w true -o result.json -cg SPARK -to 180 -
-//    r 78 22 89
-//
-//    named arguments:
-//            -h, --help             show this help message and exit
-//  -dc {true,false}, --defaultconfig {true,false}
-//    Specify if use default config. (default: true)
-//            -c CONFIG, --config CONFIG
-//    User defined config file path.
-//  -p [PROJECT [PROJECT ...]], --project [PROJECT [PROJECT ...]]
-//    Project to be analysis.  Can  be directory path, .
-//    jar file or .zip file path.
-//  -j JDK, --jdk JDK      Jdk path  for  the  project.  can  be  omitted  if
-//    configuration file  contains  it  or  "libPath" of
-//    config includes it.
-//  -t {true,false}, --track {true,false}
-//    Track source file  and  calculate  line  number of
-//    jsp files. (default: false)
-//            -w {true,false}, --write {true,false}
-//    Write detect result to file. (default: true)
-//            -o OUTPUT, --output OUTPUT
-//    Out put file path.
-//            -cg {CHA,SPARK,VTA,RTA,GEOM}, --callgraph {CHA,SPARK,VTA,RTA,GEOM}
-//    Call graph algorithm. (default: SPARK)
-//            -to TIMEOUT, --timeout TIMEOUT
-//    Path reconstruction time out. (default: 180)
-//            -es [ENTRYSELECTOR [ENTRYSELECTOR ...]], --entryselector [ENTRYSELECTOR [ENTRYSELECTOR ...]]
-//    entry        selectors,         choose        from
-//                         'JspServiceEntry','AnnotationTagEntry','PublicStaticOrMainEntry'.
-//    Multiple  selectors  can  be  set   with  '  '  in
-//    between. Default all
-//  -pc [PATHCHECKER [PATHCHECKER ...]], --pathchecker [PATHCHECKER [PATHCHECKER ...]]
-//    path checkers.  choose  from  'default'.  Multiple
-//    selectors can be set with ' ' in between.
-//            -r [RULES [RULES ...]], --rules [RULES [RULES ...]]
-//    rules (cwe id)  for  analysis.  Multiple rules can
-//    be set with ' '  in  between.  Default all if with
-//    default config.
-//  -lr LISTRULE, --listrule LISTRULE
-//                         'true' to list rules in current config.
-//            -jspc JSPC, --jspc JSPC
-//                         'true' to compile jsp if have any.
+    /**
+    usage: taintanalysis [-h] [-dc {true,false}] [-c CONFIG]
+            [-p [PROJECT [PROJECT ...]]] [-j JDK]
+            [-t {true,false}] [-w {true,false}] [-o OUTPUT]
+            [-cg {CHA,SPARK,VTA,RTA,GEOM}] [-to TIMEOUT]
+            [-es [ENTRYSELECTOR [ENTRYSELECTOR ...]]]
+            [-pc [PATHCHECKER [PATHCHECKER ...]]]
+            [-r [RULES [RULES ...]]] [-lr LISTRULE] [-jspc JSPC]
+
+    Run taint  analysis  of  given  project.  Example:  -dc  true  -p /project1
+/project2 -j /jdk/rt.jar -t true -w true -o result.json -cg SPARK -to 180 -
+    r 78 22 89
+
+    named arguments:
+            -h, --help             show this help message and exit
+  -dc {true,false}, --defaultconfig {true,false}
+    Specify if use default config. (default: true)
+            -c CONFIG, --config CONFIG
+    User defined config file path.
+  -p [PROJECT [PROJECT ...]], --project [PROJECT [PROJECT ...]]
+    Project to be analysis.  Can  be directory path, .
+    jar file or .zip file path.
+  -j JDK, --jdk JDK      Jdk path  for  the  project.  can  be  omitted  if
+    configuration file  contains  it  or  "libPath" of
+    config includes it.
+  -t {true,false}, --track {true,false}
+    Track source file  and  calculate  line  number of
+    jsp files. (default: false)
+            -w {true,false}, --write {true,false}
+    Write detect result to file. (default: true)
+            -o OUTPUT, --output OUTPUT
+    Out put file path.
+            -cg {CHA,SPARK,VTA,RTA,GEOM}, --callgraph {CHA,SPARK,VTA,RTA,GEOM}
+    Call graph algorithm. (default: SPARK)
+            -to TIMEOUT, --timeout TIMEOUT
+    Path reconstruction time out. (default: 180)
+            -es [ENTRYSELECTOR [ENTRYSELECTOR ...]], --entryselector [ENTRYSELECTOR [ENTRYSELECTOR ...]]
+    entry        selectors,         choose        from
+                         'JspServiceEntry','AnnotationTagEntry','PublicStaticOrMainEntry'.
+    Multiple  selectors  can  be  set   with  '  '  in
+    between. Default all
+  -pc [PATHCHECKER [PATHCHECKER ...]], --pathchecker [PATHCHECKER [PATHCHECKER ...]]
+    path checkers.  choose  from  'default'.  Multiple
+    selectors can be set with ' ' in between.
+            -r [RULES [RULES ...]], --rules [RULES [RULES ...]]
+    rules (cwe id)  for  analysis.  Multiple rules can
+    be set with ' '  in  between.  Default all if with
+    default config.
+  -lr LISTRULE, --listrule LISTRULE
+                         'true' to list rules in current config.
+            -jspc JSPC, --jspc JSPC
+                         'true' to compile jsp if have any.
+    **/
     public static void main(String[] args) {
         ArgumentParser parser = ArgumentParsers.newFor("taintanalysis").build()
                 .defaultHelp(true)
