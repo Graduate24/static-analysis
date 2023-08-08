@@ -4,6 +4,7 @@ import soot.jimple.infoflow.InfoflowConfiguration;
 import soot.jimple.infoflow.config.IInfoflowConfig;
 import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.options.Options;
+import taintanalysis.taintWrappers.DynamicInvokeTaintWrapper;
 import utils.ClassPathResource;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class IFFactory {
         EasyTaintWrapper wrapper;
         try {
             ClassPathResource classPathResource = new ClassPathResource("EasyTaintWrapperSource.txt");
-            wrapper = new EasyTaintWrapper(classPathResource.getInputStream());
+            wrapper = new DynamicInvokeTaintWrapper(classPathResource.getInputStream());
             infoflow.setTaintWrapper(wrapper);
         } catch (IOException e) {
             e.printStackTrace();
