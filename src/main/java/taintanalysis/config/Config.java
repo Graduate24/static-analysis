@@ -210,7 +210,7 @@ public class Config {
         String[] jarFiles = libPath.split(File.pathSeparator);
         List<String> result = new ArrayList<>();
         for (String jarName : jarFiles) {
-            if (jarName.contains("rt.jar")) {
+            if (jarName.contains("rt.jar") || jarName.equals("VIRTUAL_FS_FOR_JDK")) {
                 continue;
             }
             try {
