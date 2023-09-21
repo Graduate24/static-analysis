@@ -26,12 +26,12 @@ public class PathCheckerManager {
     };
     // TODO add more path checker here if needed.
 
-    public final Map<String, Function<InfoflowResults, PathCheckResult>> namedCheckers = new HashMap<>() {{
+    public final Map<String, Function<InfoflowResults, PathCheckResult>> namedCheckers = new HashMap() {{
         put("DEFAULT", defaultChecker);
     }};
 
     public List<Function<InfoflowResults, PathCheckResult>> pathCheckerList(String checkerNames) {
-        if (checkerNames == null || checkerNames.isBlank()) {
+        if (checkerNames == null || checkerNames.isEmpty()) {
             return new ArrayList<>();
         }
         return Arrays.stream(checkerNames.split(","))

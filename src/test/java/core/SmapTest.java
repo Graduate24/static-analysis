@@ -3,12 +3,13 @@ package core;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
-import taintanalysis.result.SmapInfo;
+import jspc.resultmapping.SmapInfo;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SmapTest {
 
@@ -123,7 +124,7 @@ public class SmapTest {
             SmapInfo smapInfo = new SmapInfo();
             String s = readSourceDebug(file);
             System.out.println(s);
-            List<String> smap = Arrays.stream(s.split("\n")).toList();
+            List<String> smap = Arrays.stream(s.split("\n")).collect(Collectors.toList());
             smapInfo.setSourceFilePath(getSourceJspPath(smap));
             for (String m : getLineMapping(smap)) {
                 smapInfo.addLineInfo(m);

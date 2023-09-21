@@ -23,6 +23,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReuseableInfoflowTest {
 
@@ -46,7 +47,7 @@ public class ReuseableInfoflowTest {
             } else {
                 File file = new File(path);
                 if (file.isDirectory()) {
-                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(Collectors.toList()));
                 }
             }
         }
@@ -61,7 +62,7 @@ public class ReuseableInfoflowTest {
             options.set_prepend_classpath(true);
             options.set_src_prec(Options.src_prec_only_class);
             options.set_ignore_resolution_errors(true);
-            options.set_exclude(excludes.stream().toList());
+            options.set_exclude(new ArrayList<>(excludes));
             options.set_keep_offset(true);
         };
 
@@ -137,7 +138,7 @@ public class ReuseableInfoflowTest {
         List<String> sinks = c.getSinks();
         String libPath = c.getLibPath();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList(), c.getPathReconstructionTimeout());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()), c.getPathReconstructionTimeout());
 
         infoflow.computeInfoflow(appPath, libPath, epoints, sources, sinks);
         List<DetectedResult> results = PathUtil.detectedResults(infoflow, infoflow.getICFG(), c.getProject());
@@ -177,7 +178,7 @@ public class ReuseableInfoflowTest {
         List<String> sinks = c.getSinks();
         String libPath = c.getLibPath();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()));
 
         infoflow.computeInfoflow(appPath, libPath, epoints, sources, sinks);
         List<DetectedResult> results = PathUtil.detectedResults(infoflow, infoflow.getICFG(), c.getProject());
@@ -205,7 +206,7 @@ public class ReuseableInfoflowTest {
         List<String> sinks = c.getSinks();
         String libPath = c.getLibPath();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()));
 
         infoflow.computeInfoflow(appPath, libPath, epoints, sources, sinks);
         List<DetectedResult> results = PathUtil.detectedResults(infoflow, infoflow.getICFG(), c.getProject());
@@ -236,7 +237,7 @@ public class ReuseableInfoflowTest {
         String libPath = c.getLibPath();
         String project = c.getProject();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()));
 
         List<RuleResult> ruleResult = new ArrayList<>();
         for (Rule r : c.getRules()) {
@@ -276,7 +277,7 @@ public class ReuseableInfoflowTest {
         String project = c.getProject();
         String tempdir = c.getTempDir();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList(), c.getCallgraphAlgorithm());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()), c.getCallgraphAlgorithm());
 
         List<RuleResult> ruleResult = new ArrayList<>();
         for (Rule r : c.getRules()) {
@@ -317,7 +318,7 @@ public class ReuseableInfoflowTest {
         String project = c.getProject();
         String tempdir = c.getTempDir();
 
-        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, c.getExcludes().stream().toList(), c.getCallgraphAlgorithm());
+        ReuseableInfoflow infoflow = IFFactory.buildReusable(appPath, new ArrayList<>(c.getExcludes()), c.getCallgraphAlgorithm());
 
         List<RuleResult> ruleResult = new ArrayList<>();
         for (Rule r : c.getRules()) {

@@ -1,4 +1,4 @@
-package taintanalysis.result;
+package jspc.resultmapping;
 
 import java.util.ArrayList;
 import java.util.List;

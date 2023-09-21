@@ -2,6 +2,7 @@ package taintanalysis.executor;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jspc.compile.JspCompiler;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import soot.jimple.infoflow.Infoflow;
 import soot.jimple.infoflow.results.InfoflowResults;
@@ -27,6 +28,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractAnalysisExecutor implements
         Preliminary<Config, Config>,
@@ -57,10 +60,16 @@ public abstract class AbstractAnalysisExecutor implements
 
     boolean doPostCheck = true;
 
+    boolean jspc = false;
+
     RuleSelectorManager ruleSelectorManager = new RuleSelectorManager();
 
     public boolean isTrackSourceFile() {
         return trackSourceFile;
+    }
+
+    public boolean isJspc() {
+        return jspc;
     }
 
     public Config getConfig() {
@@ -89,7 +98,7 @@ public abstract class AbstractAnalysisExecutor implements
 
 
     public List<String> showAllRules() {
-        return ruleSelectorManager.all().stream().map(Rule::getRuleCwe).toList();
+        return ruleSelectorManager.all().stream().map(Rule::getRuleCwe).collect(toList());
     }
 
 
@@ -100,13 +109,19 @@ public abstract class AbstractAnalysisExecutor implements
         if (config == null) {
             throw new AssertionError("config must be set before analysis.");
         }
-        if (config.getProject() == null || config.getProject().isBlank()) {
+        if (config.getProject() == null || config.getProject().isEmpty()) {
             throw new AssertionError("project must be set before analysis.");
+        } else {
+            if (jspc) {
+                JspCompiler jspCompiler = new JspCompiler();
+                jspCompiler.compile(config.getProject(), config.getProject());
+
+            }
         }
         if (config.getRules() == null || config.getRules().isEmpty()) {
             throw new AssertionError("rules must not be empty.");
         }
-        if (config.getPathCheckers() != null && !config.getPathCheckers().isBlank()) {
+        if (config.getPathCheckers() != null && !config.getPathCheckers().isEmpty()) {
             this.postChecks = PathCheckerManager.buildPathCheckerManager().pathCheckerList(config.getPathCheckers());
         }
         config.autoConfig();
@@ -118,15 +133,16 @@ public abstract class AbstractAnalysisExecutor implements
                 } else {
                     File file = new File(path);
                     if (file.isDirectory()) {
-                        realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                        realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(toList()));
                     }
                 }
             }
             config.setLibPath(String.join(File.pathSeparator, realLibPath));
-            if (config.getJdk() != null && !config.getJdk().isBlank()) {
+            if (config.getJdk() != null && !config.getJdk().isEmpty()) {
                 config.setLibPath(config.getLibPath() + File.pathSeparator + config.getJdk());
             }
         }
+
         return config;
     }
 
@@ -148,7 +164,7 @@ public abstract class AbstractAnalysisExecutor implements
     @Override
     public Infoflow buildEngine(Config config) {
         String appPath = config.getAppPath();
-        List<String> excludes = config.getExcludes().stream().toList();
+        List<String> excludes = new ArrayList<>(config.getExcludes());
         int timeout = config.getPathReconstructionTimeout();
         String callGraphAlgorithm = config.getCallgraphAlgorithm();
         ReuseableInfoflow reuseableInfoflow = IFFactory.buildReusable(appPath, excludes, timeout, callGraphAlgorithm);

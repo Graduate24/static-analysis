@@ -4,6 +4,7 @@ import soot.jimple.infoflow.InfoflowConfiguration;
 import soot.jimple.infoflow.config.IInfoflowConfig;
 import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.options.Options;
+import taintanalysis.taintWrappers.DynamicInvokeTaintWrapper;
 import utils.ClassPathResource;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class IFFactory {
         config.getPathConfiguration().setPathReconstructionMode(InfoflowConfiguration.PathReconstructionMode.Fast);
         config.getPathConfiguration().setPathReconstructionTimeout(pathReconstructionTimeout);
         // CHA may find more results but could be false positive.
-        if (callgraphAlgorithm == null || callgraphAlgorithm.isBlank()) {
+        if (callgraphAlgorithm == null || callgraphAlgorithm.isEmpty()) {
             config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
         } else if (callgraphAlgorithm.equals("CHA")) {
             config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.CHA);
@@ -70,7 +71,7 @@ public class IFFactory {
         EasyTaintWrapper wrapper;
         try {
             ClassPathResource classPathResource = new ClassPathResource("EasyTaintWrapperSource.txt");
-            wrapper = new EasyTaintWrapper(classPathResource.getInputStream());
+            wrapper = new DynamicInvokeTaintWrapper(classPathResource.getInputStream());
             infoflow.setTaintWrapper(wrapper);
         } catch (IOException e) {
             e.printStackTrace();

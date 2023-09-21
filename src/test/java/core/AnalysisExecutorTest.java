@@ -88,7 +88,7 @@ public class AnalysisExecutorTest {
     @Test
     public void test5() {
         // test jsp
-        String project = "/home/ran/Documents/work/thusa2/testprojects/jsp-demo";
+        String project = "/home/ran/Documents/work/thusa2/jsp-demo2_uncomplie";
         String jdk = "jdk/rt.jar";
         String result = "result/jsp_result.json";
         AnalysisExecutor analysisExecutor = AnalysisExecutor
@@ -96,6 +96,8 @@ public class AnalysisExecutorTest {
                 .withDefaultConfig()
                 .setProject(project)
                 .setJDK(jdk)
+                // jsp compiler
+                .setJspc(true)
                 // default is "SPARK"
                 .setCallGraphAlgorithm("SPARK")
                 // Track source file and calculate line number of jsp. Default false.

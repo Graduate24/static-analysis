@@ -35,6 +35,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class InfoflowTest {
     @Test
@@ -57,7 +58,7 @@ public class InfoflowTest {
             } else {
                 File file = new File(path);
                 if (file.isDirectory()) {
-                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(Collectors.toList()));
                 }
             }
         }
@@ -195,7 +196,7 @@ public class InfoflowTest {
             } else {
                 File file = new File(path);
                 if (file.isDirectory()) {
-                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(Collectors.toList()));
                 }
             }
         }
@@ -290,7 +291,7 @@ public class InfoflowTest {
             } else {
                 File file = new File(path);
                 if (file.isDirectory()) {
-                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(Collectors.toList()));
                 }
             }
         }

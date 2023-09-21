@@ -30,7 +30,7 @@ public class RuleSelectorManager implements RuleSelector {
     @Override
     public List<Rule> select(String... cewId) {
         Set<String> cewSet = Arrays.stream(cewId).collect(Collectors.toSet());
-        return rules.stream().filter(rule -> cewSet.contains(rule.getRuleCwe())).toList();
+        return rules.stream().filter(rule -> cewSet.contains(rule.getRuleCwe())).collect(Collectors.toList());
     }
 
     @Override

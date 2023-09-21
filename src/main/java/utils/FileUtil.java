@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileUtil {
     public static void extractJar(String zipFilePath, String destDirectory) {
@@ -45,7 +46,7 @@ public class FileUtil {
     }
 
     public static void flatExtractJar(String zipFilePath, String destDirectory) {
-        String baseName = FilenameUtils.removeExtension(Path.of(zipFilePath).getFileName().toString());
+        String baseName = FilenameUtils.removeExtension(Paths.get(zipFilePath).getFileName().toString());
         java.util.jar.JarFile jarfile = null;
         try {
             jarfile = new java.util.jar.JarFile(new java.io.File(zipFilePath));

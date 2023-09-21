@@ -16,7 +16,7 @@ import soot.jimple.infoflow.results.ResultSourceInfo;
 import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 import taintanalysis.result.DetectedResult;
 import taintanalysis.result.PathUnit;
-import taintanalysis.result.SmapInfo;
+import jspc.resultmapping.SmapInfo;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -33,6 +33,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class PathUtil {
 
@@ -58,7 +61,7 @@ public class PathUtil {
             unit.setJimpleStmt(p.toString());
             unit.setLine(p.getJavaSourceStartLineNumber());
             // java source file
-            if (trackSourceFile && projectDir != null && !projectDir.isBlank() && !(projectDir.endsWith(".jar") || projectDir.endsWith(".zip"))) {
+            if (trackSourceFile && projectDir != null && !projectDir.isEmpty() && !(projectDir.endsWith(".jar") || projectDir.endsWith(".zip"))) {
                 String file = locateSourceFile(projectDir, unit.getJavaClass());
                 unit.setFile(file);
                 if (unit.getJavaClass().endsWith("_jsp") && unit.getLine() != -1) {
@@ -92,7 +95,7 @@ public class PathUtil {
 
     public static SmapInfo getSmapInfo(String sourceDebug) {
         SmapInfo smapInfo = new SmapInfo();
-        List<String> smap = Arrays.stream(sourceDebug.split("\n")).toList();
+        List<String> smap = Arrays.stream(sourceDebug.split("\n")).collect(toList());
         smapInfo.setSourceFilePath(getSourceJspPath(smap));
         for (String m : getLineMapping(smap)) {
             smapInfo.addLineInfo(m);
@@ -119,7 +122,7 @@ public class PathUtil {
     }
 
     public static List<String> pathStm(ResultSourceInfo source) {
-        return Arrays.stream(source.getPath()).map(String::valueOf).toList();
+        return Arrays.stream(source.getPath()).map(String::valueOf).collect(toList());
     }
 
     public static List<DetectedResult> detectedResults(Infoflow infoflow, IInfoflowCFG iCFG, String projectDir, boolean trackSourceFile) {

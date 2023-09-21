@@ -24,7 +24,7 @@ public class EntrySelectorManager {
 
     // TODO more annotation to be collected.
     private final HashSet<String> tags = new HashSet<>(
-            List.of("Lorg/springframework/amqp/rabbit/annotation/RabbitHandler;",
+            Arrays.asList("Lorg/springframework/amqp/rabbit/annotation/RabbitHandler;",
                     "Lorg/springframework/web/bind/annotation/GetMapping;",
                     "Lorg/springframework/web/bind/annotation/PostMapping;",
                     "Lorg/springframework/web/bind/annotation/ExceptionHandler;"));
@@ -98,10 +98,10 @@ public class EntrySelectorManager {
         return entries;
     };
 
-    public List<EntrySelector> selectors = List.of(jspServiceEntry, annotationTagEntry, publicStaticOrMainEntry);
+    public List<EntrySelector> selectors = Arrays.asList(jspServiceEntry, annotationTagEntry, publicStaticOrMainEntry);
 
 
-    private final Map<String, EntrySelector> namedEntrySelector = new HashMap<>() {{
+    private final Map<String, EntrySelector> namedEntrySelector = new HashMap() {{
         put("JSPSERVICEENTRY", jspServiceEntry);
         put("ANNOTATIONTAGENTRY", annotationTagEntry);
         put("PUBLICSTATICORMAINENTRY", publicStaticOrMainEntry);
@@ -145,7 +145,7 @@ public class EntrySelectorManager {
     }
 
     public List<EntrySelector> selectorList(String entryNames) {
-        if (entryNames == null || entryNames.isBlank() || entryNames.equalsIgnoreCase("ALL")) {
+        if (entryNames == null || entryNames.isEmpty() || entryNames.equalsIgnoreCase("ALL")) {
             return selectors;
         }
         return Arrays.stream(entryNames.split(","))

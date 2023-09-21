@@ -15,6 +15,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class Config {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -129,7 +132,7 @@ public class Config {
 
     public void autoConfig() {
         if (autoDetect) {
-            if (project == null || project.isBlank()) {
+            if (project == null || project.isEmpty()) {
                 throw new AssertionError("project must not be null or empty!");
             }
             File f = new File(project);
@@ -146,8 +149,8 @@ public class Config {
                 Path tmpdir = PathUtil.createTempdir();
                 extractTemp = tempDir;
                 logger.info("create temp dir for extract: {}", tmpdir);
-                String projectName = FilenameUtils.removeExtension(Path.of(project).getFileName().toString());
-                Path workDir = Path.of(tmpdir.toString(), projectName);
+                String projectName = FilenameUtils.removeExtension(Paths.get(project).getFileName().toString());
+                Path workDir = Paths.get(tmpdir.toString(), projectName);
                 FileUtil.extractJar(project, workDir.toString());
                 this.project = workDir.toString();
             }
@@ -159,8 +162,8 @@ public class Config {
             List<String> classFiles = PathUtil.filterFile(project, new String[]{"**/*.class"});
             List<String> jarFiles = PathUtil.filterFile(project, new String[]{"**/*.jar"});
             // add rt.jar to lib path
-            libPath = String.join(File.pathSeparator, jarFiles.stream().map(j -> Paths.get(project, j).toString()).toList());
-            if (libPath.isBlank()) {
+            libPath = jarFiles.stream().map(j -> Paths.get(project, j).toString()).collect(Collectors.joining(File.pathSeparator));
+            if (libPath.isEmpty()) {
                 libPath += jdk;
             } else {
                 libPath += File.pathSeparator + jdk;
@@ -207,7 +210,7 @@ public class Config {
         String[] jarFiles = libPath.split(File.pathSeparator);
         List<String> result = new ArrayList<>();
         for (String jarName : jarFiles) {
-            if (jarName.contains("rt.jar")) {
+            if (jarName.contains("rt.jar") || jarName.equals("VIRTUAL_FS_FOR_JDK")) {
                 continue;
             }
             try {
@@ -230,7 +233,7 @@ public class Config {
 
     public void scanLib() {
         List<String> realLibPath = new ArrayList<>();
-        if (jdk != null && !jdk.isBlank()) {
+        if (jdk != null && !jdk.isEmpty()) {
             realLibPath.add(jdk);
         }
         for (String path : libPaths) {
@@ -239,7 +242,7 @@ public class Config {
             } else {
                 File file = new File(path);
                 if (file.isDirectory()) {
-                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).toList());
+                    realLibPath.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles())).filter(f -> f.getName().endsWith(".jar")).map(File::getPath).collect(toList()));
                 }
             }
         }

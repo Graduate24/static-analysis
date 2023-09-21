@@ -41,7 +41,7 @@ public class AnalysisExecutor extends AbstractAnalysisExecutor {
     }
 
     public AnalysisExecutor setRules(List<String> cweIds) {
-        return setRules(cweIds.toArray(String[]::new));
+        return setRules(cweIds.toArray(new String[0]));
     }
 
 
@@ -112,6 +112,11 @@ public class AnalysisExecutor extends AbstractAnalysisExecutor {
 
     public AnalysisExecutor setPathChecker(String pathChecker) {
         this.config.setPathCheckers(pathChecker);
+        return this;
+    }
+
+    public AnalysisExecutor setJspc(boolean jspc) {
+        this.jspc = jspc;
         return this;
     }
 
