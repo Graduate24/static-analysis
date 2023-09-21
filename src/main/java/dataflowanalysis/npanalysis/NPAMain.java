@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NPAMain {
-    public static String sourceDirectory = System.getProperty("user.dir") + File.separator + "target" + File.separator + "test-classes";
-    public static String clsName = "edu.tsinghua.NullPointerExample";
+    public static String sourceDirectory = System.getProperty("user.dir") + File.separator + "target" + File.separator + "classes";
+    public static String clsName = "example.np.NullPointerExample";
 
     public static void setupSoot() {
         G.reset();
