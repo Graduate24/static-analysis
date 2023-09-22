@@ -62,6 +62,20 @@ public class SootTest {
         PackManager.v().runPacks();
         PackManager.v().writeOutput();
 
+        System.out.println("=============CG====================");
+        CallGraph cg = Scene.v().getCallGraph();
+        for (Edge edge : cg) {
+            SootMethod srcMethod = edge.src();
+            SootMethod tgtMethod = edge.tgt();
+            // Print the source and target methods
+            System.out.println("Source Method: " + srcMethod);
+            System.out.println("Target Method: " + tgtMethod);
+            System.out.println();
+
+        }
+        System.out.println("=============CG END====================");
+
+
         System.out.println("test1 body: ");
         print(test1ActiveBody);
         System.out.println();
@@ -78,18 +92,7 @@ public class SootTest {
         System.out.println();
 
 
-        System.out.println("=============CG====================");
-        CallGraph cg = Scene.v().getCallGraph();
-        for (Edge edge : cg) {
-            SootMethod srcMethod = edge.src();
-            SootMethod tgtMethod = edge.tgt();
-            // Print the source and target methods
-            System.out.println("Source Method: " + srcMethod);
-            System.out.println("Target Method: " + tgtMethod);
-            System.out.println();
 
-        }
-        System.out.println("=============CG END====================");
         System.out.println();
 //
 //
