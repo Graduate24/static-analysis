@@ -115,7 +115,7 @@ public class DataflowAnalysis {
         Transform sparkConfig = new Transform("cg.spark", null);
         PhaseOptions.v().setPhaseOption(sparkConfig, "enabled:true");
         PhaseOptions.v().setPhaseOption(sparkConfig, "vta:true");
-        PhaseOptions.v().setPhaseOption(sparkConfig, "on-fly-cg:false");
+        PhaseOptions.v().setPhaseOption(sparkConfig, "on-fly-cg:true");
         Map<String, String> phaseOptions = PhaseOptions.v().getPhaseOptions(sparkConfig);
         SparkTransformer.v().transform(sparkConfig.getPhaseName(), phaseOptions);
         SootMethod src = Scene.v().getSootClass(targetTestClassName).getMethodByName("m1");

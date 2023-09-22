@@ -28,6 +28,7 @@ public class IFFactory {
             options.set_process_dir(Arrays.asList(appPath.split(File.pathSeparator)));
             options.set_keep_offset(true);
             options.set_allow_phantom_refs(true);
+            options.set_no_writeout_body_releasing(true);
         };
 
         // infoflow config
