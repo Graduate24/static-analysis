@@ -59,6 +59,14 @@ public class SootTest {
         methodTest3.retrieveActiveBody();
         Body test3ActiveBody = methodTest3.getActiveBody();
 
+        SootMethod methodTest4 = sClass.getMethodByName("test4");
+        methodTest4.retrieveActiveBody();
+        Body test4ActiveBody = methodTest4.getActiveBody();
+
+        SootMethod methodTest5 = sClass.getMethodByName("test5");
+        methodTest5.retrieveActiveBody();
+        Body test5ActiveBody = methodTest5.getActiveBody();
+
         SootMethod main = sClass.getMethodByName("main");
         main.retrieveActiveBody();
         Body mainBody = main.getActiveBody();
@@ -98,6 +106,10 @@ public class SootTest {
         print(test2ActiveBody);
         System.out.println("test3 body: ");
         print(test3ActiveBody);
+        System.out.println("test4 body: ");
+        print(test4ActiveBody);
+        System.out.println("test5 body: ");
+        print(test5ActiveBody);
 
     }
 
