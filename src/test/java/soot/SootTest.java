@@ -3,6 +3,7 @@ package soot;
 import org.junit.Test;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
+import soot.jimple.toolkits.callgraph.Sources;
 import soot.options.Options;
 import soot.toolkits.graph.BriefUnitGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
@@ -10,6 +11,7 @@ import soot.toolkits.graph.UnitGraph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class SootTest {
@@ -21,6 +23,7 @@ public class SootTest {
         // target classes
         String classDir = "D:\\work\\graduate\\demo\\target\\classes";
         String className = "edu.tsinghua.demo.controller.DemoController1";
+        String serviceName = "edu.tsinghua.demo.service.demo1.Demo1Service";
 
         Options.v().set_process_dir(Collections.singletonList(classDir));
         Options.v().set_whole_program(true);
@@ -37,7 +40,12 @@ public class SootTest {
 
         SootClass sClass = Scene.v().loadClassAndSupport(className);
         sClass.setApplicationClass();
+
+        SootClass goodServiceClass = Scene.v().loadClassAndSupport(serviceName);
+        goodServiceClass.setApplicationClass();
+
         Scene.v().loadNecessaryClasses();
+
 
         SootMethod methodTest1 = sClass.getMethodByName("test1");
         methodTest1.retrieveActiveBody();
@@ -49,12 +57,18 @@ public class SootTest {
 
         SootMethod methodTest3 = sClass.getMethodByName("test3");
         methodTest3.retrieveActiveBody();
-        Body test3ActiveBody = methodTest2.getActiveBody();
+        Body test3ActiveBody = methodTest3.getActiveBody();
+
+        SootMethod main = sClass.getMethodByName("main");
+        main.retrieveActiveBody();
+        Body mainBody = main.getActiveBody();
+
 
         List<SootMethod> entryPoints = new ArrayList<>();
-        entryPoints.add(methodTest1);
-        entryPoints.add(methodTest2);
-        entryPoints.add(methodTest3);
+//        entryPoints.add(methodTest1);
+//        entryPoints.add(methodTest2);
+//        entryPoints.add(methodTest3);
+        entryPoints.add(main);
 
         Scene.v().setEntryPoints(entryPoints);
 
@@ -76,12 +90,24 @@ public class SootTest {
         System.out.println("=============CG END====================");
 
 
+
         System.out.println("test1 body: ");
         print(test1ActiveBody);
         System.out.println();
         System.out.println("test2 body: ");
         print(test2ActiveBody);
+        System.out.println("test3 body: ");
+        print(test3ActiveBody);
 
+    }
+
+    public void printPossibleCallers(SootMethod target) {
+        CallGraph cg = Scene.v().getCallGraph();
+        Iterator sources = new Sources(cg.edgesInto(target));
+        while (sources.hasNext()) {
+            SootMethod src = (SootMethod)sources.next();
+            System.out.println(target + " might be called by " + src);
+        }
     }
 
     private void print(Body body){
