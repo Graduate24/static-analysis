@@ -1,5 +1,6 @@
 package soot;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
@@ -26,6 +27,9 @@ public class SootTest {
         String serviceName = "edu.tsinghua.demo.service.demo1.Demo1Service";
 
         Options.v().set_process_dir(Collections.singletonList(classDir));
+        Options.v().set_exclude(
+                Lists.newArrayList("sun.security.validator.PKIXValidator","java.security.cert.PKIXParameters"
+        ));
         Options.v().set_whole_program(true);
         Options.v().set_prepend_classpath(true);
         Options.v().set_keep_line_number(true);
@@ -76,6 +80,8 @@ public class SootTest {
 //        entryPoints.add(methodTest1);
 //        entryPoints.add(methodTest2);
 //        entryPoints.add(methodTest3);
+//        entryPoints.add(methodTest4);
+//        entryPoints.add(methodTest5);
         entryPoints.add(main);
 
         Scene.v().setEntryPoints(entryPoints);
@@ -89,6 +95,9 @@ public class SootTest {
         for (Edge edge : cg) {
             SootMethod srcMethod = edge.src();
             SootMethod tgtMethod = edge.tgt();
+            if(!srcMethod.getSignature().startsWith("<edu.tsinghua")){
+                continue;
+            }
             // Print the source and target methods
             System.out.println("Source Method: " + srcMethod);
             System.out.println("Target Method: " + tgtMethod);
