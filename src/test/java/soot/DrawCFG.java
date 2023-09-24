@@ -84,7 +84,9 @@ public class DrawCFG {
             Edge edge = iteratorEdges.next();
             String node_src = edge.getSrc().toString();
             String node_tgt = edge.getTgt().toString();
-
+            if(!node_src.startsWith("<edu.tsinghua")){
+                continue;
+            }
             dot.drawEdge(node_src, node_tgt);
             System.out.println(i++);
         }
