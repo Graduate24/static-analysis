@@ -55,6 +55,41 @@ public class DrawCFG {
         drawCallGraph(callGraph, "test1.dot");
     }
 
+    @Test
+    public void test2() {
+        String classDir = "D:\\work\\graduate\\demo\\target\\classes";
+        String className = "edu.tsinghua.demo.controller.DemoController3";
+
+        soot.G.reset();
+
+        Options.v().set_process_dir(Collections.singletonList(classDir));
+        Options.v().set_prepend_classpath(true);
+        Options.v().set_whole_program(true);
+        Options.v().set_allow_phantom_refs(true);
+        Options.v().set_src_prec(Options.src_prec_only_class);
+        Options.v().set_output_format(Options.output_format_jimple);
+        Options.v().set_no_writeout_body_releasing(true);
+        Options.v().setPhaseOption("jb", "use-original-names:true");
+        Options.v().setPhaseOption("cg", "enabled:true");
+        Options.v().setPhaseOption("cg.spark", "enabled:true");
+        Options.v().setPhaseOption("cg.spark", "verbose:false");
+
+        Scene.v().loadNecessaryClasses();
+
+        SootClass entryClass1 = Scene.v().loadClassAndSupport(className);
+        SootMethod methodTest1 = entryClass1.getMethodByName("main");
+
+        Options.v().set_main_class(methodTest1.getSignature());
+        Scene.v().setEntryPoints(Collections.singletonList(methodTest1));
+
+
+        PackManager.v().runPacks();
+
+        CallGraph callGraph = Scene.v().getCallGraph();
+
+        drawCallGraph(callGraph, "test3.dot");
+    }
+
     private void drawMethodDependenceGraph(SootMethod entryMethod) {
         Body body = entryMethod.retrieveActiveBody();
         ExceptionalUnitGraph exceptionalUnitGraph = new ExceptionalUnitGraph(body);
