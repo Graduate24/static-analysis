@@ -49,6 +49,8 @@ public class DrawCFG {
 
 
         PackManager.v().runPacks();
+        PackManager.v().writeOutput();
+
 
         CallGraph callGraph = Scene.v().getCallGraph();
 
@@ -84,10 +86,13 @@ public class DrawCFG {
 
 
         PackManager.v().runPacks();
+        PackManager.v().writeOutput();
 
         CallGraph callGraph = Scene.v().getCallGraph();
 
         drawCallGraph(callGraph, "test3.dot");
+        drawMethodDependenceGraph(methodTest1);
+        drawProcedureDependenceGraph(methodTest1);
     }
 
     private void drawMethodDependenceGraph(SootMethod entryMethod) {
@@ -95,9 +100,8 @@ public class DrawCFG {
         ExceptionalUnitGraph exceptionalUnitGraph = new ExceptionalUnitGraph(body);
 
         CFGToDotGraph cfgForMethod = new CFGToDotGraph();
-        cfgForMethod.drawCFG(exceptionalUnitGraph);
-        DotGraph cfgDot = cfgForMethod.drawCFG(exceptionalUnitGraph);
-        cfgDot.plot("/home/quocnghi/Downloads/graph/cfg.dot");
+        DotGraph cfgDot = cfgForMethod.drawCFG(exceptionalUnitGraph, body);
+        cfgDot.plot("./cfg.dot");
     }
 
     private void drawProcedureDependenceGraph(SootMethod entryMethod) {
@@ -106,7 +110,7 @@ public class DrawCFG {
         HashMutablePDG hashMutablePDG = new HashMutablePDG(exceptionalUnitGraph);
         CFGToDotGraph pdgForMethod = new CFGToDotGraph();
         DotGraph pdgDot = pdgForMethod.drawCFG(hashMutablePDG, body);
-        pdgDot.plot("/home/quocnghi/Downloads/graph/pdg.dot");
+        pdgDot.plot("./pdg.dot");
     }
 
     private void drawCallGraph(CallGraph callGraph,String name) {
