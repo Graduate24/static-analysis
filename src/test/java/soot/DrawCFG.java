@@ -1,9 +1,11 @@
 package soot;
 
 
+import heros.InterproceduralCFG;
 import org.junit.Test;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Edge;
+import soot.jimple.toolkits.ide.icfg.JimpleBasedInterproceduralCFG;
 import soot.options.Options;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import soot.toolkits.graph.pdg.HashMutablePDG;
@@ -72,6 +74,7 @@ public class DrawCFG {
         Options.v().set_output_format(Options.output_format_jimple);
         Options.v().set_no_writeout_body_releasing(true);
         Options.v().setPhaseOption("jb", "use-original-names:true");
+        Options.v().setPhaseOption("cg.cha","enabled:false");
         Options.v().setPhaseOption("cg", "enabled:true");
         Options.v().setPhaseOption("cg.spark", "enabled:true");
         Options.v().setPhaseOption("cg.spark", "verbose:false");
@@ -79,7 +82,7 @@ public class DrawCFG {
         Scene.v().loadNecessaryClasses();
 
         SootClass entryClass1 = Scene.v().loadClassAndSupport(className);
-        SootMethod methodTest1 = entryClass1.getMethodByName("main");
+        SootMethod methodTest1 = entryClass1.getMethodByName("test1");
 
         Options.v().set_main_class(methodTest1.getSignature());
         Scene.v().setEntryPoints(Collections.singletonList(methodTest1));
@@ -102,6 +105,9 @@ public class DrawCFG {
         CFGToDotGraph cfgForMethod = new CFGToDotGraph();
         DotGraph cfgDot = cfgForMethod.drawCFG(exceptionalUnitGraph, body);
         cfgDot.plot("./cfg.dot");
+
+        InterproceduralCFG<Unit, SootMethod> icfg = new JimpleBasedInterproceduralCFG();
+
     }
 
     private void drawProcedureDependenceGraph(SootMethod entryMethod) {
