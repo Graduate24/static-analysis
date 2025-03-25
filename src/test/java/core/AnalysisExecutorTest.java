@@ -11,7 +11,7 @@ public class AnalysisExecutorTest {
     @Test
     public void test1() {
         // Project to be analysis. Can be directory path, .jar file or .zip file path.
-        String project = "/home/ran/Documents/work/thusa2/ifpc-testcase/WebGoat-5.0";
+        String project = "/home/ran/Documents/work/graduate/BenchmarkJava/annotated-benchmark";
         // jdk path for the project. can be omitted if configuration file contains it or "libPath" of config includes it.
         String jdk = "/home/ran/Documents/work/thusa2/ifpc-testcase/jdk/rt.jar";
         String result = "test_result.json";
